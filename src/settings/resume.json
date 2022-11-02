@@ -1,58 +1,46 @@
 {
     "basics": {
-        "name": "Jo Lienhoop",
+        "name": "Guangrui Wang",
         "label": "Computer Science student",
-        "email": "hey@jolienhoop.com",
+        "email": "guangruw@andrew.cmu.edu",
         "phone": "(XXX) XXX-XXXX",
         "picture": "jl.png",
         "x_title": "Hey, I'm",
         "job": "CS student",
-        "description": "Hey, I'm Jo Lienhoop, a Computer Science student based in Bremen, Germany. I love all things technical. Talk soon!",
-        "summary": "based in Bremen, Germany.",
-        "keywords": "personal,website,portfolio,template,kit,jo,lienhoop,jolienhoop,computer,science,bremen,germany,react,github,linkedin,google,gitlab,telegram,material,design,ui,webapp",
-        "url": "https://jolienhoop.com",
+        "description": "Hey, I'm Guangrui Wang, a first semester master’s student in the Electrical and Computer Engineering department at Carnegie Mellon. I love all things technical. Talk soon!",
+        "summary": "based in CMU.",
+        "keywords": "personal,website,portfolio,computer,science,react,github,linkedin,google,gitlab,telegram,material,design,ui,webapp",
+        "url": "https://www.muma.icu",
         "location": {
             "address": "XX XXXXXstreet",
             "postalCode": "XXXXX",
-            "city": "Bremen",
-            "country": "Germany",
-            "countryCode": "DEU",
-            "region": "Bremen"
+            "city": "Pittsburgh",
+            "country": "United States",
+            "countryCode": "USA",
+            "region": "PA"
         },
         "profiles": [
             {
                 "network": "Google",
-                "username": "hey@jolienhoop.com",
-                "url": "mailto:hey@jolienhoop.com",
+                "username": "wgr5600133@gmail.com",
+                "url": "mailto:wgr5600133@gmail.com",
                 "x_icon": "fab fa-google"
             },
             {
                 "network": "LinkedIn",
-                "username": "jolienhoop",
-                "url": "https://www.linkedin.com/in/jolienhoop/",
+                "username": "Guangrui Wang",
+                "url": "https://www.linkedin.com/in/guangruiwang",
                 "x_icon": "fab fa-linkedin-in"
             },
             {
                 "network": "GitHub",
-                "username": "johoop",
-                "url": "https://github.com/JoHoop",
+                "username": "muma",
+                "url": "https://github.com/wgr5600133",
                 "x_icon": "fab fa-github"
             },
             {
-                "network": "GitLab",
-                "username": "johoop",
-                "url": "https://gitlab.com/JoHoop",
-                "x_icon": "fab fa-gitlab"
-            },
-            {
-                "network": "Telegram",
-                "username": "jolienhoop",
-                "url": "https://t.me/jolienhoop",
-                "x_icon": "fab fa-telegram-plane"
-            },
-            {
                 "network": "Discord",
-                "username": "Jo#4467",
+                "username": "muma#5503",
                 "url": "https://discord.com",
                 "x_icon": "fab fa-discord"
             }
