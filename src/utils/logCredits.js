@@ -11,7 +11,6 @@ export const logCredits = () => {
     ].join(";");
 
     return console.log(
-        `%c © ${new Date().getFullYear()} github.com/johoop ${pieceEmoji}`,
         logStyle
     );
 };

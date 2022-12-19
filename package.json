@@ -1,10 +1,9 @@
 {
     "name": "personal-website-react",
     "version": "0.2.0",
-    "homepage": "https://jolienhoop.com",
+    "homepage": "https://www.muma.icu",
     "description": "This is a clean customizable portfolio template for developers.",
-    "repository": "https://github.com/JoHoop/personal-website-react",
-    "author": "Jo Lienhoop <hey@jolienhoop.com>",
+    "author": "muma <guangruw@andrew.cmu.edu>",
     "license": "MIT",
     "dependencies": {
         "@material-ui/core": "^4.11.0",
@@ -29,7 +28,8 @@
         "sockjs-client": "^1.6.1",
         "stomp-websocket": "^2.3.4-next",
         "three": "^0.125.0",
-        "use-dencrypt-effect": "1.0.1"
+        "use-dencrypt-effect": "1.0.1",
+        "uuid": "^9.0.0"
     },
     "scripts": {
         "start": "react-scripts start",
