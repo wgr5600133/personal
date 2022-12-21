@@ -5,7 +5,7 @@ export const Videos = () => {
     const [url, setUrl] = useState("");
     return (
         <div>
-            <Player video_url={url}/>
+            <Player videoName={url}/>
             <input onChange={(evt)=>setTmpUrl(evt.target.value)}></input>
             <button onClick={()=>setUrl(tmp_url)}>submit</button>
         </div>

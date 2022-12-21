@@ -5,6 +5,7 @@ import { v4 as uuidv4 } from 'uuid';
 import SockJS from "sockjs-client"
 import Stomp from "stomp-websocket"
 import {Button} from "@material-ui/core";
+import axios from "axios";
 
 export const Player = props => {
     const player = useRef();
@@ -44,16 +45,28 @@ export const Player = props => {
         if (Hls.isSupported()){
             let hlt = new Hls();
             hlt.attachMedia(player.current);
-            hlt.loadSource(props.video_url);
-            if (stompClient != null){
-                console.log(props.video_url);
-                let message = createPkg({videoUrl:props.video_url});
-                stompClient.send("/app/videoSync",{}, message);
-            }
+
+            axios.get(
+                "http://localhost/api/video/getVideoInfo",
+                {params:{videoName:props.videoName}}
+            )
+            .then((res)=>{
+                if (res.data !== ''){
+                    console.log(res.data.steamLocation);
+                    let streamLocation = 'http://localhost/'+ res.data.steamLocation;
+                    hlt.loadSource(streamLocation);
+                    if (stompClient != null){
+                        let message = createPkg({videoUrl:streamLocation});
+                        stompClient.send("/app/videoSync",{}, message);
+                    }
+                }
+            }).catch((err)=>{
+                console.log(err);
+            })
         }else{
             player.current.innerHTML = "Sorry, your browser does not support M3U8 files.";
         }
-    },[props.video_url])
+    },[props.videoName])
 
     useEffect(()=>{
         if(timer != null){
@@ -119,6 +132,6 @@ export const Player = props => {
 };
 
 Player.propTypes = {
-    video_url:PropTypes.string
+    videoName:PropTypes.string
 };
 
