@@ -5,7 +5,7 @@ export const Videos = () => {
     const [url, setUrl] = useState("");
     const [videoNameList, setVideoNameList] = useState([]);
     useEffect(()=>{
-        axios.get("http://localhost/api/video/getAllVideos")
+        axios.get("https://www.muma.icu/api/video/getAllVideos")
             .then((res)=>{
               if(res.data !== ''){
                   let videoList = res.data.map((video)=>{
