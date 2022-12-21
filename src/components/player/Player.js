@@ -47,13 +47,13 @@ export const Player = props => {
             hlt.attachMedia(player.current);
 
             axios.get(
-                "http://localhost/api/video/getVideoInfo",
+                "https://www.muma.icu/api/video/getVideoInfo",
                 {params:{videoName:props.videoName}}
             )
             .then((res)=>{
                 if (res.data !== ''){
                     console.log(res.data.steamLocation);
-                    let streamLocation = 'http://localhost/'+ res.data.steamLocation;
+                    let streamLocation = 'https://localhost/'+ res.data.steamLocation;
                     hlt.loadSource(streamLocation);
                     if (stompClient != null){
                         let message = createPkg({videoUrl:streamLocation});

@@ -15,7 +15,7 @@ export const VideoUpload = props => {
         formData.append('file', selectedVideo);
 
 
-        axios.post('http://localhost/api/video/uploadVideo', formData, {
+        axios.post('https://www.muma.icu/api/video/uploadVideo', formData, {
             headers: {
                 "Content-Type": "multipart/form-data"
             },

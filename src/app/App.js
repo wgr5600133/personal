@@ -22,7 +22,7 @@ export const App = () => {
                     <Route path="/" exact component={Home} />
                     <Route path="/video" component={Videos} />
                     <Route path="/resume" component={Resume} />
-                    <Route path="/upload" component={Upload}></Route>
+                    <Route path="/upload" component={Upload}/>
                     <Route path="*" component={PageNotFound} />
                 </Switch>
             </Router>
