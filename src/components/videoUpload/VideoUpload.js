@@ -11,8 +11,9 @@ export const VideoUpload = props => {
     }
     const handleUpload = () => {
         const formData = new FormData();
+        formData.append('videoName', selectedVideo.name);
         formData.append('file', selectedVideo);
-        console.log("try to upload")
+
 
         axios.post('http://localhost/api/video/uploadVideo', formData, {
             headers: {
