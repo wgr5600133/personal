@@ -53,7 +53,7 @@ export const Player = props => {
             .then((res)=>{
                 if (res.data !== ''){
                     console.log(res.data.steamLocation);
-                    let streamLocation = 'https://localhost/'+ res.data.steamLocation;
+                    let streamLocation = 'https://www.muma.icu/'+ res.data.steamLocation;
                     hlt.loadSource(streamLocation);
                     if (stompClient != null){
                         let message = createPkg({videoUrl:streamLocation});
