@@ -38,7 +38,7 @@ export const Player = props => {
     }
 
     const connect=()=>{
-       let socket = new SockJS('http://localhost:8080/websocket');
+       let socket = new SockJS('https://localhost:9999/websocket');
        setStompClient(Stomp.over(socket));
     }
     useEffect(()=>{
