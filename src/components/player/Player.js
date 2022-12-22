@@ -38,7 +38,7 @@ export const Player = props => {
     }
 
     const connect=()=>{
-       let socket = new SockJS('https://localhost/websocket');
+       let socket = new SockJS('http://localhost/websocket');
        setStompClient(Stomp.over(socket));
     }
     useEffect(()=>{
@@ -47,13 +47,13 @@ export const Player = props => {
             hlt.attachMedia(player.current);
 
             axios.get(
-                "https://www.muma.icu/api/video/getVideoInfo",
+                "http://localhost/api/video/getVideoInfo",
                 {params:{videoName:props.videoName}}
             )
             .then((res)=>{
                 if (res.data !== ''){
                     console.log(res.data.steamLocation);
-                    let streamLocation = 'https://www.muma.icu/'+ res.data.steamLocation;
+                    let streamLocation = 'http://localhost/'+ res.data.steamLocation;
                     hlt.loadSource(streamLocation);
                     if (stompClient != null){
                         let message = createPkg({videoUrl:streamLocation});

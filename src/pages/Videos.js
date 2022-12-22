@@ -20,13 +20,13 @@ export const Videos = () => {
     return (
         <div>
             <Player videoName={url}/>
-            <ui>
+            <ul>
                 {
                     videoNameList.map((videoName,index)=>{
                         return <li key={index} onClick={()=>setUrl(videoName)}>{index + "."}{videoName}</li>
                     })
                 }
-            </ui>
+            </ul>
 
         </div>
     );
