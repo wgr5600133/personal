@@ -2,6 +2,8 @@ import React, {useState} from 'react';
 import { Button, Input, LinearProgress,Box, WithStyles,Container  } from '@material-ui/core';
 import axios from 'axios';
 import { v4 as uuidv4 } from 'uuid';
+import {showToast} from "../../utils/toastUtils";
+import {toast, ToastContainer} from "react-toastify";
 
 // TODO: fix the style of this page
 export const VideoUpload = props => {
@@ -20,11 +22,11 @@ export const VideoUpload = props => {
         const fileSize = selectedVideo.size;
         const videoName = selectedVideo.name;
         const id = uuidv4();
-
+        setUploading(true);
+        const toastID = showToast("Uploading video, please wait","info");
 
         fileReader.onload = (event) => {
             const chunk = event.target.result;
-            console.log(chunk)
             offset += chunk.byteLength;
             uploadChunks(offset,chunk)
         }
@@ -56,23 +58,29 @@ export const VideoUpload = props => {
                     console.log(res.data);
                     if (offset < fileSize) {
                         readChunk(offset);
+                        toast.update(toastID, {autoClose: false,closeOnClick: false, render: `Uploading video, please wait!! Progress ${Math.round(offset / fileSize * 100)}%` });
+                    }else{
+                        toast.update(toastID, {autoClose: 5000, render: "Video uploaded successfully", type: toast.TYPE.SUCCESS});
                     }
                 }).catch((err)=>{
+                    toast.update(toastID, {autoClose: 5000, render: "Video upload failed", type: toast.TYPE.ERROR});
                     console.log(err);
                 }
             )
         }
         readChunk(offset);
+        setUploading(false);
     }
 
 
     return (
         <Container maxWidth="md">
             <Input type="file" onChange={(e)=>handleFileSelection(e)} />
-            <Button variant="contained" color="primary" onClick={()=>handleUpload()}>
+            <Button variant="contained" color="primary" onClick={()=>handleUpload()} disabled={uploading}>
                 Upload Video
             </Button>
             <LinearProgress variant="determinate" value={progress} />
+            <ToastContainer/>
         </Container>
     );
 };
