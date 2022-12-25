@@ -16,7 +16,9 @@ export const Player = props => {
     const [id,setId] = useState(uuidv4());
     const [isSync,setIsSync] = useState(false);
     const [isConnected,setIsConnected] = useState(false);
+    const [isHost,setIsHost] = useState(false);
     const URL = process.env.REACT_APP_ENV_STATE === 'DEV' ? process.env.REACT_APP_DEV_URL : process.env.REACT_APP_PROD_URL;
+
 
     const createPkg = (obj) =>{
         return JSON.stringify({...obj,id:id})
@@ -26,8 +28,22 @@ export const Player = props => {
         if (stompClient !== null && stompClient.connected) {
             showToast("You are the host now, select video to play","info");
             stompClient.send("/app/setHost", {}, id);
+            setIsHost(true);
         }else{
             showToast("Please connect to the websocket server first","error");
+        }
+    }
+    const syncVideoURL = (url) =>{
+        if (stompClient !== null && stompClient.connected) {
+            let message = createPkg({videoUrl:url});
+            stompClient.send("/app/videoSync",{}, message);
+        }
+    }
+    const syncHostSeeked = () => {
+        if(isHost){
+            player.current.pause();
+            syncVideoState("pause");
+            syncTime(player.current.currentTime);
         }
     }
 
@@ -51,7 +67,12 @@ export const Player = props => {
     useEffect(()=>{
         if (Hls.isSupported()){
             let hlt = new Hls();
-            hlt.attachMedia(player.current);
+            if(isConnected && isHost){
+                hlt.attachMedia(player.current);
+            }else if(!isConnected){
+                hlt.attachMedia(player.current);
+
+            }
 
             axios.get(
                 `${URL}/api/video/getVideoInfo`,
@@ -59,12 +80,15 @@ export const Player = props => {
             )
             .then((res)=>{
                 if (res.data !== ''){
-                    console.log(res.data.steamLocation);
-                    let streamLocation = `${URL}${res.data.steamLocation}`;
-                    hlt.loadSource(streamLocation);
-                    if (stompClient != null){
-                        let message = createPkg({videoUrl:streamLocation});
-                        stompClient.send("/app/videoSync",{}, message);
+                    let streamLocation = `${URL}/${res.data.steamLocation}`;
+                    if(isConnected){
+                        if (isHost){
+                            console.log("host is sending video url");
+                            syncVideoURL(streamLocation);
+                            hlt.loadSource(streamLocation);
+                        }
+                    }else{
+                        hlt.loadSource(streamLocation);
                     }
                 }
             }).catch((err)=>{
@@ -92,20 +116,22 @@ export const Player = props => {
         if (isConnected){
             setIsSync(true);
             stompClient.subscribe('/topic/videoSync',(m)=>{
-                console.log("receive from server" + m.body);
-                let hlt = new Hls();
-                hlt.attachMedia(player.current);
                 if (m.body !== null){
-                    hlt.loadSource(JSON.parse(m.body).videoUrl);
+                    const message = JSON.parse(m.body);
+                    if (message.id !== id){
+                        let hlt = new Hls();
+                        hlt.attachMedia(player.current);
+                        hlt.loadSource(message.videoUrl);
+                    }
                 }
             })
             stompClient.subscribe('/topic/time',(m)=>{
                 console.log("receive from server" + m.body);
                 if (player.current != null){
                     if (m.body !== null){
-                        let hostTime = JSON.parse(m.body).time;
-                        if (Math.abs(hostTime - player.current.currentTime) > 1){
-                            player.current.currentTime = hostTime;
+                        const message = JSON.parse(m.body);
+                        if (message.id !== id && Math.abs(message.time - player.current.currentTime) > 1){
+                            player.current.currentTime = message.time;
                         }
                     }
                 }
@@ -114,11 +140,13 @@ export const Player = props => {
                 console.log("receive from server" + m.body);
                 if (player.current != null){
                     if (m.body !== null){
-                        let action = JSON.parse(m.body).action;
-                        if (action === "play"){
-                            player.current.play();
-                        }else if (action === "pause"){
-                            player.current.pause();
+                        const message = JSON.parse(m.body);
+                        if(message.id !== id){
+                            if (message.action === "play"){
+                                player.current.play();
+                            }else if (message.action === "pause"){
+                                player.current.pause();
+                            }
                         }
                     }
                 }
@@ -145,6 +173,7 @@ export const Player = props => {
                    controls
                    onPlay={() => syncVideoState("play")}
                    onPause={() => syncVideoState("pause")}
+                   onSeeked={() => syncHostSeeked()}
             />
             <Button onClick={()=>connect()} disabled={isSync}>Sync video</Button>
             <Button onClick={()=>setHost()}>Make this as Host</Button>
