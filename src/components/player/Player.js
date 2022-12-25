@@ -4,7 +4,7 @@ import Hls from "hls.js"
 import { v4 as uuidv4 } from 'uuid';
 import SockJS from "sockjs-client"
 import Stomp from "stomp-websocket"
-import {Button} from "@material-ui/core";
+import {Box, Button} from "@material-ui/core";
 import axios from "axios";
 import {showToast} from "../../utils/toastUtils";
 import {ToastContainer} from "react-toastify";
@@ -168,15 +168,21 @@ export const Player = props => {
 
     return (
         <div>
-            <video id="video-player"
-                   ref={player}
-                   controls
-                   onPlay={() => syncVideoState("play")}
-                   onPause={() => syncVideoState("pause")}
-                   onSeeked={() => syncHostSeeked()}
-            />
-            <Button onClick={()=>connect()} disabled={isSync}>Sync video</Button>
-            <Button onClick={()=>setHost()}>Make this as Host</Button>
+            <Box display="flex" flexDirection="column" alignItems="center" justifyContent="center" p={1} m={5}>
+                <video id="video-player"
+                       ref={player}
+                       controls
+                       onPlay={() => syncVideoState("play")}
+                       onPause={() => syncVideoState("pause")}
+                       onSeeked={() => syncHostSeeked()}
+                       width="500px"
+                       height="300px"
+                />
+            </Box>
+            <Box display="flex" flexDirection="row" alignItems="center" justifyContent="center" p={1} m={1}>
+                <Button onClick={()=>connect()} disabled={isSync}>Sync video</Button>
+                <Button onClick={()=>setHost()}>Make this as Host</Button>
+            </Box>
             <ToastContainer />
         </div>
     );

@@ -5,7 +5,6 @@ import { v4 as uuidv4 } from 'uuid';
 import {showToast} from "../../utils/toastUtils";
 import {toast, ToastContainer} from "react-toastify";
 
-// TODO: fix the style of this page
 export const VideoUpload = props => {
     const [selectedVideo,setVideo] = useState()
     const [progress, setProgress] = React.useState(0);
