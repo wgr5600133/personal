@@ -3,7 +3,7 @@ import {toast} from "react-toastify";
 export const showToast = (message, type) => {
     switch (type) {
         case 'success':
-            toast.success(message, {
+            return toast.success(message, {
                 position: "bottom-right",
                 autoClose: 5000,
                 hideProgressBar: false,
@@ -13,9 +13,8 @@ export const showToast = (message, type) => {
                 progress: undefined,
                 theme: "light",
             });
-            break;
         case 'error':
-            toast.error(message, {
+            return toast.error(message, {
                 position: "bottom-right",
                 autoClose: 5000,
                 hideProgressBar: false,
@@ -25,9 +24,8 @@ export const showToast = (message, type) => {
                 progress: undefined,
                 theme: "light",
             });
-            break;
         case 'info':
-            toast.info(message, {
+            return toast.info(message, {
                 position: "bottom-right",
                 autoClose: 5000,
                 hideProgressBar: false,
@@ -37,9 +35,8 @@ export const showToast = (message, type) => {
                 progress: undefined,
                 theme: "light",
             });
-            break;
         case 'warning':
-            toast.warning(message, {
+            return toast.warning(message, {
                 position: "bottom-right",
                 autoClose: 5000,
                 hideProgressBar: false,
@@ -49,9 +46,8 @@ export const showToast = (message, type) => {
                 progress: undefined,
                 theme: "light",
             });
-            break;
         default:
-            toast(message, {
+            return toast(message, {
                 position: "bottom-right",
                 autoClose: 5000,
                 hideProgressBar: false,
