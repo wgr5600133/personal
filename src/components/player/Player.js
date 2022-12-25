@@ -6,12 +6,16 @@ import SockJS from "sockjs-client"
 import Stomp from "stomp-websocket"
 import {Button} from "@material-ui/core";
 import axios from "axios";
+import {showToast} from "../../utils/toastUtils";
+import {ToastContainer} from "react-toastify";
+import 'react-toastify/dist/ReactToastify.css';
 
 export const Player = props => {
     const player = useRef();
     const [stompClient,setStompClient] = useState(null);
-    const [timer,setTimer] = useState(null);
     const [id,setId] = useState(uuidv4());
+    const [isSync,setIsSync] = useState(false);
+    const [isConnected,setIsConnected] = useState(false);
     const URL = process.env.REACT_APP_ENV_STATE === 'DEV' ? process.env.REACT_APP_DEV_URL : process.env.REACT_APP_PROD_URL;
 
     const createPkg = (obj) =>{
@@ -19,9 +23,11 @@ export const Player = props => {
     }
 
     const setHost=()=>{
-        console.log("This is the host");
-        if (stompClient !== null) {
+        if (stompClient !== null && stompClient.connected) {
+            showToast("You are the host now, select video to play","info");
             stompClient.send("/app/setHost", {}, id);
+        }else{
+            showToast("Please connect to the websocket server first","error");
         }
     }
 
@@ -70,53 +76,67 @@ export const Player = props => {
     },[props.videoName])
 
     useEffect(()=>{
-        if(timer != null){
-            clearInterval(timer);
-            setTimer(null);
-        }
+        let t = null;
         if(stompClient !== null){
-            stompClient.connect({},(frame)=>{
-                console.log("Connected:" + frame);
-                stompClient.subscribe('/topic/videoSync',(m)=>{
-                    console.log("receive from server" + m.body);
-                    let hlt = new Hls();
-                    hlt.attachMedia(player.current);
-                    if (m.body !== null){
-                        hlt.loadSource(JSON.parse(m.body).videoUrl);
-                    }
-                })
-                stompClient.subscribe('/topic/time',(m)=>{
-                    console.log("receive from server" + m.body);
-                    if (player.current != null){
-                        if (m.body !== null){
-                            let hostTime = JSON.parse(m.body).time;
-                            if (Math.abs(hostTime - player.current.currentTime) > 1){
-                                player.current.currentTime = hostTime;
-                            }
-                        }
-                    }
-                })
-                stompClient.subscribe('/topic/action',(m)=>{
-                    console.log("receive from server" + m.body);
-                    if (player.current != null){
-                        if (m.body !== null){
-                            let action = JSON.parse(m.body).action;
-                            if (action === "play"){
-                                player.current.play();
-                            }else if (action === "pause"){
-                                player.current.pause();
-                            }
-                        }
-                    }
-                })
-
+            stompClient.connect({},()=>{
+                setIsConnected(true);
+                showToast("Connected to websocket server!!", "success");
+            }, () =>{
+                setIsConnected(false);
+                showToast("Cannot connect to websocket server!!","error");
             })
-            let t = setInterval(()=>{
-                syncTime(player.current.currentTime);
-            },1000)
-            setTimer(t);
         }
     },[stompClient])
+    useEffect(()=>{
+        let t = null;
+        if (isConnected){
+            setIsSync(true);
+            stompClient.subscribe('/topic/videoSync',(m)=>{
+                console.log("receive from server" + m.body);
+                let hlt = new Hls();
+                hlt.attachMedia(player.current);
+                if (m.body !== null){
+                    hlt.loadSource(JSON.parse(m.body).videoUrl);
+                }
+            })
+            stompClient.subscribe('/topic/time',(m)=>{
+                console.log("receive from server" + m.body);
+                if (player.current != null){
+                    if (m.body !== null){
+                        let hostTime = JSON.parse(m.body).time;
+                        if (Math.abs(hostTime - player.current.currentTime) > 1){
+                            player.current.currentTime = hostTime;
+                        }
+                    }
+                }
+            })
+            stompClient.subscribe('/topic/action',(m)=>{
+                console.log("receive from server" + m.body);
+                if (player.current != null){
+                    if (m.body !== null){
+                        let action = JSON.parse(m.body).action;
+                        if (action === "play"){
+                            player.current.play();
+                        }else if (action === "pause"){
+                            player.current.pause();
+                        }
+                    }
+                }
+            })
+            t = setInterval(()=>{
+                syncTime(player.current.currentTime);
+            },1000)
+        }else{
+            setIsSync(false);
+        }
+        return ()=>{
+            if (t !== null){
+                clearInterval(t);
+            }
+            setIsSync(false);
+        }
+
+    },[isConnected])
 
     return (
         <div>
@@ -126,8 +146,9 @@ export const Player = props => {
                    onPlay={() => syncVideoState("play")}
                    onPause={() => syncVideoState("pause")}
             />
-            <Button onClick={()=>connect()}>Sync video</Button>
+            <Button onClick={()=>connect()} disabled={isSync}>Sync video</Button>
             <Button onClick={()=>setHost()}>Make this as Host</Button>
+            <ToastContainer />
         </div>
     );
 };
