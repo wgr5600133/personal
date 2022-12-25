@@ -9,6 +9,7 @@ export const VideoUpload = props => {
     const [progress, setProgress] = React.useState(0);
     const [uploading, setUploading] = useState(false);
     const [chunkSize, setChunkSize] = useState(1024 * 1024);
+    const URL = process.env.REACT_APP_ENV_STATE === 'DEV' ? process.env.REACT_APP_DEV_URL : process.env.REACT_APP_PROD_URL;
 
     const handleFileSelection = (event) => {
         setVideo(event.target.files[0]);
@@ -41,7 +42,7 @@ export const VideoUpload = props => {
             formData.append('fileSize',fileSize);
             formData.append('id',id);
 
-            axios.post('https://www.muma.icu/api/video/uploadChuckVideo',formData,{
+            axios.post(`${URL}/api/video/uploadChuckVideo`,formData,{
                 headers: {
                     'Content-Type': 'multipart/form-data',
                     'Content-Disposition': `attachment; filename="${videoName}"`

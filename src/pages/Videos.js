@@ -4,8 +4,10 @@ import axios from "axios";
 export const Videos = () => {
     const [url, setUrl] = useState("");
     const [videoNameList, setVideoNameList] = useState([]);
+    const URL = process.env.REACT_APP_ENV_STATE === 'DEV' ? process.env.REACT_APP_DEV_URL : process.env.REACT_APP_PROD_URL;
+
     useEffect(()=>{
-        axios.get("https://www.muma.icu/api/video/getAllVideos")
+        axios.get(`${URL}/api/video/getAllVideos`)
             .then((res)=>{
               if(res.data !== ''){
                   let videoList = res.data.map((video)=>{

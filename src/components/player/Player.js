@@ -12,6 +12,7 @@ export const Player = props => {
     const [stompClient,setStompClient] = useState(null);
     const [timer,setTimer] = useState(null);
     const [id,setId] = useState(uuidv4());
+    const URL = process.env.REACT_APP_ENV_STATE === 'DEV' ? process.env.REACT_APP_DEV_URL : process.env.REACT_APP_PROD_URL;
 
     const createPkg = (obj) =>{
         return JSON.stringify({...obj,id:id})
@@ -38,7 +39,7 @@ export const Player = props => {
     }
 
     const connect=()=>{
-       let socket = new SockJS('https://www.muma.icu/websocket');
+       let socket = new SockJS(`${URL}/websocket`);
        setStompClient(Stomp.over(socket));
     }
     useEffect(()=>{
@@ -47,13 +48,13 @@ export const Player = props => {
             hlt.attachMedia(player.current);
 
             axios.get(
-                "https://www.muma.icu/api/video/getVideoInfo",
+                `${URL}/api/video/getVideoInfo`,
                 {params:{videoName:props.videoName}}
             )
             .then((res)=>{
                 if (res.data !== ''){
                     console.log(res.data.steamLocation);
-                    let streamLocation = 'https://www.muma.icu/'+ res.data.steamLocation;
+                    let streamLocation = `${URL}${res.data.steamLocation}`;
                     hlt.loadSource(streamLocation);
                     if (stompClient != null){
                         let message = createPkg({videoUrl:streamLocation});
