@@ -75,10 +75,14 @@ export const VideoUpload = props => {
 
     return (
         <Container maxWidth="md">
-            <Input type="file" onChange={(e)=>handleFileSelection(e)} />
-            <Button variant="contained" color="primary" onClick={()=>handleUpload()} disabled={uploading}>
-                Upload Video
-            </Button>
+            <Box display="flex" flexDirection="column" alignItems="center" justifyContent="center" p={1} m={1}>
+                <Input type="file" onChange={(e)=>handleFileSelection(e)} />
+            </Box>
+            <Box display="flex" flexDirection="column" alignItems="center" justifyContent="center" p={1} m={1}>
+                <Button variant="contained" color="primary" onClick={()=>handleUpload()} disabled={uploading}>
+                    Upload Video
+                </Button>
+            </Box>
             <LinearProgress variant="determinate" value={progress} />
             <ToastContainer/>
         </Container>
