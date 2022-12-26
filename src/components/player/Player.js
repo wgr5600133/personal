@@ -115,6 +115,9 @@ export const Player = props => {
         let t = null;
         if (isConnected){
             setIsSync(true);
+            stompClient.subscribe("/topic/public", (m)=>{
+                showToast(m.body,"info");
+            })
             stompClient.subscribe('/topic/videoSync',(m)=>{
                 if (m.body !== null){
                     const message = JSON.parse(m.body);

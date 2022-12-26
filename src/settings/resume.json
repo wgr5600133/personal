@@ -105,16 +105,12 @@
     ],
     "languages": [
         {
-            "language": "German",
+            "language": "Chinese",
             "fluency": "Native speaker"
         },
         {
             "language": "English",
             "fluency": "Fluent speaker"
-        },
-        {
-            "language": "French",
-            "fluency": "Good knowledge"
         }
     ],
     "interests": [
@@ -125,7 +121,7 @@
     ],
     "references": [
         {
-            "name": "Jane Doe",
+            "name": "Guangrui Wang",
             "reference": "Reference..."
         }
     ]

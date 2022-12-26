@@ -46,7 +46,7 @@ export const Videos = () => {
                                     <ListItemText primary={videoName} onClick={()=>setUrl(videoName)}/>
                                     <Avatar onClick={()=>{console.log("delete")}}>
                                         <IconButton>
-                                            <i className="fa fa-trash" aria-hidden="true"></i>
+                                            <i className="fas fa-trash-alt"></i>
                                         </IconButton>
                                     </Avatar>
                                 </ListItem>
