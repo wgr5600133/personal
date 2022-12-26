@@ -10,6 +10,7 @@ import {PageNotFound} from "../pages/PageNotFound";
 import {Videos} from "../pages/Videos";
 import { Home } from "../pages/Home";
 import {Upload} from "../pages/Upload";
+import {StreamPlayer} from "../components/steamPlayer/StreamPlayer";
 export const App = () => {
     logCredits();
 
@@ -23,6 +24,7 @@ export const App = () => {
                     <Route path="/video" component={Videos} />
                     <Route path="/resume" component={Resume} />
                     <Route path="/upload" component={Upload}/>
+                    <Route path="/steam" component={StreamPlayer}/>
                     <Route path="*" component={PageNotFound} />
                 </Switch>
             </Router>
